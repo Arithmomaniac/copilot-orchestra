@@ -21,25 +21,127 @@ The system solves a critical challenge in AI-assisted development: maintaining c
 
 The Orchestra system consists of four specialized agents:
 
-- **Conductor Agent** - The orchestrator that manages the full development cycle. It researches plans via the Planning subagent, delegates coding work to the Implement subagents, enforces quality gates with the Code Review subagents, and handles all user interactions and pause points. Uses Claude Sonnet 4.5 by default
+### Conductor Agent
+- `Conductor.agent.md` - Main orchestration agent that manages the complete development cycle.
+    - Coordinates Planning, Implementation, and Code Review subagents.
+    - Generates the plan to be followed.
+    - Handles user interactions and mandatory pause points.
+    - Enforces the Planning → Implementation → Review → Commit cycle.
+    - Uses Claude Sonnet 4.5 by default.
 
-- **Planning Subagent** - Performs comprehensive research and context gathering. Analyzes the codebase, identifies relevant files and patterns, and returns structured findings to the Conductor agent to inform plan creation. Uses Claude Sonnet 4.5 by default.
+### Planning Subagent
+- **`planning-subagent.agent.md`** - Research and context gathering specialist.
+    - Analyzes codebase structure and patterns.
+    - Identifies relevant files and functions.
+    - Returns structured findings to inform plan creation.
+    - Uses Claude Sonnet 4.5 by default.
 
-- **Implementation Subagent** - Executes individual phases of the plan, following strict TDD conventions. Writes failing tests first, sees them fail, implements minimal code to make them pass, and reports completion back to the Conductor agent. Uses Claude Haiku 4.5 by default.
+### Implementation Subagent
+- **`implement-subagent.agent.md`** - Implementation specialist following TDD conventions.
+    - Executes individual phases of the development plan.
+    - Writes failing tests first, then minimal code to pass.
+    - Works autonomously within phase boundaries.
+    - Uses Claude Haiku 4.5 by default for premium request efficiency.
 
-- **Code Review Subagent** - Validates implementations against acceptance criteria. Uses git to review uncommitted code. It checks test coverage, code quality, and adherence to best practices, and returns structured reviews (APPROVED/NEEDS_REVISION/FAILED) back to the Conductor. The Conductor will then use the review to either spin up another Implement subagent to fix issues or prompt the user to review, commit, and then continue to the next phase. Uses Claude Sonnet 4.5 by default.
+### Code Review Subagent
+- **`code-review-subagent.agent.md`** - Quality assurance specialist.
+    - Reviews uncommitted code changes using git to identify new code.
+    - Validates test coverage and code quality.
+    - Returns review results back to Conductor (APPROVED/NEEDS_REVISION/FAILED).
+    - Uses Claude Sonnet 4.5 by default.
 
 ## Prerequisites
 
 Before using GitHub Copilot Orchestra, ensure you have:
 
 - **VS Code Insiders** - Required for custom chat modes feature that enables subagents and handing off to them.
-  - Download from: https://code.visualstudio.com/insiders/
+    - Download from: https://code.visualstudio.com/insiders/
 
 - **GitHub Copilot Subscription** - Active subscription required for AI-powered agents
-  - Individual or Business plan
-  - GitHub Copilot Chat extension installed and enabled
+    - Individual or Business plan
+    - GitHub Copilot Chat extension installed and enabled
 
 - **Git** - Version control is integral to the workflow
-  - Used for commit workflow at end of each phase
-  - Recommended: Basic familiarity with git commands
+    - Used for commit workflow at end of each phase
+    - Recommended: Basic familiarity with git commands
+
+## Installation
+
+### Initial Setup
+
+1. **Clone or Download the Repository**
+   ```bash
+   git clone https://github.com/ShepAlderson/copilot-orchestra.git
+   cd copilot-orchestra
+   ```
+   
+   Alternatively, download the repository as a ZIP file and extract it to your desired location or just copy the contents of the agent files from the browser.
+
+2. **Verify Prerequisites**
+    - Ensure the latest VS Code Insiders is installed and running.
+    - Confirm the GitHub Copilot Chat extension is active (check the chat icon in the sidebar).
+    - Verify your workspace is a git repository (run `git status` to confirm)
+        - If not, you can use `git init` if you have git installed.
+
+### Setup Custom Agents
+
+The GitHub Copilot Orchestra uses custom chat modes in VS Code Insiders to enable the multi-agent workflow. Each `.agent.md` file defines a specialized AI agent.
+
+1. **Open VS Code Insiders** in your workspace directory
+    ```bash
+    cd /path/to/your/project
+    code-insiders .
+    ```
+
+2. **Locate Agent Files** - The repository includes four `.agent.md` files in the root directory:
+    - `Conductor.agent.md`
+    - `planning-subagent.agent.md`
+    - `implement-subagent.agent.md`
+    - `code-review-subagent.agent.md`
+
+3. **Install the agent files**
+    - **Copy the agent.md files to your project's root directory**
+        - Great for sharing among a team.
+        - Scoped to the individual project.
+    - **Install the custom agents in your User Data**
+        - Allows the custom agents to work in any project you open with VSCode Insiders.
+        - Copy files to the User Data location:
+            - Something like `/Users/username/Library/Application Support/Code - Insiders/User/prompts` on Mac, or the equivalent on your system
+        - **OR:**
+        - Manual Setup Process:
+            - Click the "Agent" at the bottom of the copilot chat.
+            - Click "Configure Custom Agents".
+            - Click "Create new custom agent" in the command dropdown at the top of VSCode.
+            - Select "User Data"
+            - Type the name of the file you're setting up. i.e.:
+                - Conductor
+                - planning-subagent
+                - implement-subagent
+                - code-review-subagent
+            - Copy and paste the context of the agent file from this repo into the file that opens in VSCode.
+
+4. Create the Plans Directory
+    - The Conductor agent generates documentation files to track progress. Create the `plans/` directory (or the Conductor will make it when it writes out the first plan file):
+
+        ```bash
+        mkdir plans
+        ```
+    - This directory will store:
+        - Core task plan documents (`<task-name>-plan.md`)
+        - Phase completion summaries (`<task-name>-phase-<N>-complete.md`)
+        - Final task completion summaries (`<task-name>-complete.md`)
+
+**No Additional Configuration Required** - The agents will appear in the GitHub Copilot Chat interface automatically.
+
+## Using the Conductor Agent
+
+Once setup is complete, you can start using the Conductor agent:
+
+1. **Via Chat Mode Dropdown**:
+    - Open GitHub Copilot Chat
+    - Click the agent dropdown at the bottom of the chat panel
+    - Select "Conductor" from the list of available modes
+
+2. **Via @-Mention**:
+    - In the GitHub Copilot Chat, type `@Conductor` followed by your request
+    - Example: `@Conductor help me implement a new authentication feature`
