@@ -370,15 +370,15 @@ Created when all phases are done, contains:
     - Target 1-3 files modified per phase when possible.
 
 - **Provide Good Context** - Help the `planning-subagent` find relevant code
-    - Mention specific files or directories if you know them.
+    - Mention specific files or directories if you know them and attach them as explicit context in the AI chat.
     - Reference existing patterns to follow.
     - Call out any constraints or requirements upfront.
 
-- **Use the Right Model** - The default agent configurations are optimized for cost/quality balance.
-    - Planning: Claude Sonnet 4.5 (complex reasoning)
-    - Implementation: Claude Haiku 4.5 (efficient execution)
-    - Review: Claude Sonnet 4.5 (thorough analysis)
-    - You can customize these in the `.agent.md` files if you'd like to use different models. Just change the model at the top of the file. (VSCode should autocomplete models available.)
+- **Use the Right Model** - The default agent configurations are optimized for a cost/quality balance.
+    - Planning: Claude Sonnet 4.5 (project overview and collecting data for the plan)
+    - Implementation: Claude Haiku 4.5 (efficient implementation of tests and code)
+    - Review: Claude Sonnet 4.5 (thorough analysis and code review)
+    - You can customize these in the `.agent.md` files if you'd like to use different models. Just change the model at the top of the file. (VSCode should autocomplete models available. Just delete past the `:` and type `:` again and a dropdown select should appear.)
 
 ## Extending GitHub Copilot Orchestra to fit your needs
 
