@@ -55,7 +55,7 @@ The Orchestra system consists of four specialized agents:
 
 Before using the GitHub Copilot Orchestra, ensure you have:
 
-- **VS Code Insiders** - Required for custom chat modes feature that enables subagents and handing off to them.
+- **VS Code Insiders** - Required for the custom chat modes feature that enables subagents and handing tasks off to them.
     - Download from: https://code.visualstudio.com/insiders/
 
 - **GitHub Copilot Subscription** - Active subscription required for AI-powered agents
@@ -79,16 +79,16 @@ Before using the GitHub Copilot Orchestra, ensure you have:
    Alternatively, download the repository as a ZIP file and extract it to your desired location or just copy the contents of the agent files from the browser.
 
 2. **Verify Prerequisites**
-    - Ensure the latest VS Code Insiders is installed and running.
+    - Ensure the latest VSCode Insiders is installed and running.
     - Confirm the GitHub Copilot Chat extension is active (check the chat icon in the sidebar).
     - Verify your workspace is a git repository (run `git status` to confirm)
         - If not, you can use `git init` if you have git installed.
 
 ### Setup Custom Agents
 
-The GitHub Copilot Orchestra uses custom chat modes in VS Code Insiders to enable the multi-agent workflow. Each `.agent.md` file defines a specialized AI agent.
+The GitHub Copilot Orchestra uses custom chat modes in VSCode Insiders to enable the multi-agent workflow. Each `.agent.md` file defines a specialized AI agent.
 
-1. **Open VS Code Insiders** in your workspace directory
+1. **Open VSCode Insiders** in your workspace directory
     ```bash
     cd /path/to/your/project
     code-insiders .
@@ -101,16 +101,16 @@ The GitHub Copilot Orchestra uses custom chat modes in VS Code Insiders to enabl
     - `code-review-subagent.agent.md`
 
 3. **Install the agent files**
-    - **Copy the agent.md files to your project's root directory**
+    - **Copy the `.agent.md` files to your project's root directory**
         - Great for sharing among a team.
         - Scoped to the individual project.
-    - **Install the custom agents in your User Data**
+    - **Install the custom agents in your User Data for use in all workspaces**
         - Allows the custom agents to work in any project you open with VSCode Insiders.
         - Copy files to the User Data location:
             - Something like `/Users/username/Library/Application Support/Code - Insiders/User/prompts` on Mac, or the equivalent on your system
         - **OR:**
         - Manual Setup Process:
-            - Click the "Agent" at the bottom of the copilot chat.
+            - Click the chat mode dropdown at the bottom of the copilot chat.
             - Click "Configure Custom Agents".
             - Click "Create new custom agent" in the command dropdown at the top of VSCode.
             - Select "User Data"
@@ -138,14 +138,10 @@ The GitHub Copilot Orchestra uses custom chat modes in VS Code Insiders to enabl
 
 Once setup is complete, you can start using the Conductor agent:
 
-1. **Via Chat Mode Dropdown**:
-    - Open GitHub Copilot Chat
-    - Click the agent dropdown at the bottom of the chat panel
-    - Select "Conductor" from the list of available modes
-
-2. **Via @-Mention**:
-    - In the GitHub Copilot Chat, type `@Conductor` followed by your request
-    - Example: `@Conductor help me implement a new authentication feature`
+**Via Chat Mode Dropdown**:
+- Open GitHub Copilot Chat
+- Click the agent dropdown at the bottom of the chat panel
+- Select "Conductor" from the list of available modes
 
 ## How It Works
 
