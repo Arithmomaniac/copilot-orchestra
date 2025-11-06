@@ -356,9 +356,8 @@ Created when all phases are done, contains:
     - Passing tests give confidence to proceed.
 
 - **Pay Attention to Reviews** - The `code-review-subagent` catches important issues
-    - If status is NEEDS_REVISION, the feedback is handed back to the conductor to start a new `implement-subagent` to fix the issue.
-    - Don't skip reviews even if you're moving quickly.
-    - Use FAILED status as a signal to reassess approach. The `Conductor` will come back to the user and ask for input on what to do next.
+    - If status is `NEEDS_REVISION`, the feedback is handed back to the `Conductor` to start a new `implement-subagent` to fix the issue.
+    - Use `FAILED` status as a signal to reassess approach. The `Conductor` will come back to the user and ask for input on what to do next.
 
 - **Leverage the Documentation** - Phase completion files are valuable artifacts.
     - Review them before making commits.
