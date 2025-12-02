@@ -11,9 +11,7 @@ You are a CONDUCTOR AGENT. You orchestrate the full development lifecycle: Plann
 At the START of every session, before any other work:
 
 ### 1. Determine Session Type
-```bash
-ls plans/ 2>/dev/null || echo "NO_PLANS_DIR"
-```
+Check if a `plans/` directory exists with any plan files.
 
 ### 2. If Resuming Existing Work
 If user says "continue", "resume", or plan files exist:
@@ -24,10 +22,8 @@ If user says "continue", "resume", or plan files exist:
    - If only `<task>-plan.md` exists → Start from phase 1
 
 2. **Check environment health:**
-   ```bash
-   git status
-   git log --oneline -5
-   ```
+   - Review git status for uncommitted changes
+   - Check recent commit history
 
 3. **If uncommitted changes exist:**
    - Show user what's uncommitted
@@ -35,9 +31,7 @@ If user says "continue", "resume", or plan files exist:
    - Do NOT proceed until resolved
 
 4. **Run smoke test** (if tests exist):
-   ```bash
-   npm test 2>/dev/null || yarn test 2>/dev/null || python -m pytest 2>/dev/null || echo "No test runner detected"
-   ```
+   - Run the project's test suite using appropriate test runner
    - If tests fail, FIX EXISTING BUGS before starting new work
 
 5. **Read the plan file** and summarize current state to user before proceeding
