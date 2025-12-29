@@ -49,4 +49,18 @@ CRITICAL: You receive context from the parent agent including:
 **Next Steps:** {What the CONDUCTOR should do next}
 </output_format>
 
+### E2E Verification Check (Only if enabled in feature list)
+Check the `e2e_verification` field in `plans/<task-name>-features.json`.
+
+**If `e2e_verification: true`:**
+For each feature claimed as complete in this phase:
+- Was it tested end-to-end (not just unit tested)?
+- Is the verification method documented?
+- Does the test actually verify the feature description?
+
+If features lack proper E2E verification, return `NEEDS_REVISION`.
+
+**If `e2e_verification: false`:**
+Skip E2E verification checks. Unit test coverage is sufficient.
+
 Keep feedback concise, specific, and actionable. Focus on blocking issues vs. nice-to-haves. Reference specific files, functions, and lines where relevant.

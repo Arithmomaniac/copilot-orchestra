@@ -380,6 +380,64 @@ Created when all phases are done, contains:
     - Review: Claude Sonnet 4.5 (thorough analysis and code review)
     - You can customize these in the `.agent.md` files if you'd like to use different models. Just change the model at the top of the file. (VSCode should autocomplete models available. Just delete past the `:` and type `:` again and a dropdown select should appear.)
 
+## Working Across Multiple Sessions
+
+The Orchestra pattern supports long-running development that spans multiple sessions. Here's how to maintain continuity:
+
+### Resuming Interrupted Work
+
+If a session is interrupted or you return later:
+
+1. **Start Conductor** and say "continue" or "resume work on [task name]"
+2. Conductor will:
+   - Scan `plans/` for existing artifacts
+   - Determine which phase you're on
+   - Check for uncommitted changes
+   - Run a smoke test
+   - Resume from the correct point
+
+### Progress Artifacts
+
+Orchestra creates these files to enable cross-session continuity:
+
+| File | Purpose |
+|------|---------|
+| `plans/<task>-plan.md` | Full plan with all phases |
+| `plans/<task>-features.json` | Granular feature checklist (50-200+ items) |
+| `plans/<task>-phase-N-complete.md` | Record of each completed phase |
+| `plans/<task>-complete.md` | Final summary when done |
+
+### Best Practices for Long-Running Work
+
+- **Commit frequently** - Each phase should end with a commit
+- **Don't stop mid-phase** - If you must stop, let Conductor document the state
+- **Trust the artifacts** - Conductor reads plan files to determine where to resume
+- **Keep tests passing** - Conductor runs smoke tests on resume to catch broken states
+
+### Recovery from Broken State
+
+If you resume and tests are failing:
+1. Conductor will detect this and alert you
+2. Fix existing bugs BEFORE starting new work
+3. Alternatively, use `git stash` or `git checkout` to restore last good state
+
+## Verification Modes
+
+During planning, the Conductor will ask you to choose a verification mode:
+
+### E2E Verification (Recommended for user-facing features)
+- Each feature must be verified end-to-end
+- Browser automation for web UIs, actual API calls for backends
+- Takes longer but catches integration bugs
+- Best for: Web apps, APIs, CLI tools
+
+### Standard Verification (Faster iteration)
+- Unit tests and code review are sufficient
+- Faster development cycles
+- Best for: Libraries, internal tools, rapid prototyping
+
+You can choose different modes for different tasks based on your needs.
+
 ## Extending GitHub Copilot Orchestra to fit your needs
 
 ### Customizing Agents

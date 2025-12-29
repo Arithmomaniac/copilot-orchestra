@@ -31,3 +31,36 @@ When you've finished the implementation task:
 3. Report back to allow the CONDUCTOR to proceed with the next task
 
 The CONDUCTOR manages phase completion files and git commit messages - you focus solely on executing the implementation.
+
+<verification_requirements>
+## Feature Verification
+
+Your verification approach depends on the **verification mode** specified by the Conductor:
+
+### If E2E Verification Mode is ENABLED:
+Before reporting ANY feature as complete:
+
+1. **Unit tests alone are NOT sufficient**
+   Verify the feature works end-to-end as a user would experience it.
+
+2. **Verification by type:**
+   - **Web UI**: Use browser automation or verify the complete user flow
+   - **API endpoints**: Make actual HTTP requests to running server
+   - **CLI tools**: Run actual commands, verify output
+   - **Libraries**: Write integration tests using the public API
+
+3. **NEVER mark a feature complete based on:**
+   - Code "looking correct"
+   - Unit tests passing alone
+   - Assumptions about behavior
+
+4. **Report verification method** for each feature in your summary.
+
+### If E2E Verification Mode is DISABLED:
+Standard TDD verification is sufficient:
+- Unit tests pass
+- Code follows project conventions
+- Code review approval
+
+Report features as complete once tests pass and code is clean.
+</verification_requirements>

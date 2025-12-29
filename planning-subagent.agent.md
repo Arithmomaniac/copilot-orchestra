@@ -45,3 +45,10 @@ Return a structured summary with:
 - **Patterns/Conventions:** What the codebase follows
 - **Implementation Options:** 2-3 approaches if applicable
 - **Open Questions:** What remains unclear (if any)
+
+**For Feature Breakdown (helps Conductor build feature list):**
+- **User-Facing Behaviors:** What actions should users be able to perform?
+- **Validation Rules:** What inputs need validation? What constraints exist?
+- **Error Scenarios:** What can go wrong? How should errors be handled?
+- **Edge Cases:** Unusual but valid scenarios to consider
+- **Security Considerations:** Auth, permissions, data protection needs
