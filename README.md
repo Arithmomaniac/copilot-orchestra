@@ -20,36 +20,53 @@ The system solves a critical challenge in AI-assisted development: maintaining c
 
 ## Architecture Overview
 
-The Orchestra system consists of four specialized agents:
+The Orchestra system provides **two architecture options**:
 
-### Conductor Agent
-- `Conductor.agent.md` - Main orchestration agent that manages the complete development cycle.
-    - Coordinates Planning, Implementation, and Code Review subagents.
+### Option 1: Root Agent with Skills (Recommended)
+Uses a root agent (`Conductor.agent.md`) that references agent skills in `.github/skills/`. This is the recommended approach for most use cases.
+
+**Components:**
+- `Conductor.agent.md` - Main orchestration agent in the root directory
+- `.github/skills/planning/SKILL.md` - Planning skill
+- `.github/skills/implementation/SKILL.md` - Implementation skill  
+- `.github/skills/code-review/SKILL.md` - Code review skill
+
+### Option 2: Conductor Skill with Subskills
+Uses the Conductor as a skill itself (`.github/skills/conductor/SKILL.md`) with subskill files in the same directory. This allows the Conductor to be invoked by other agents or workflows.
+
+**Components:**
+- `.github/skills/conductor/SKILL.md` - Main orchestration skill
+- `.github/skills/conductor/planning.md` - Planning subskill
+- `.github/skills/conductor/implementation.md` - Implementation subskill
+- `.github/skills/conductor/code-review.md` - Code review subskill
+
+---
+
+### Conductor Agent/Skill
+- Main orchestration that manages the complete development cycle.
+    - Coordinates Planning, Implementation, and Code Review.
     - Generates the plan to be followed.
     - Handles user interactions and mandatory pause points.
     - Enforces the Planning → Implementation → Review → Commit cycle.
     - Uses Claude Sonnet 4.5 by default.
 
-### Planning Subagent
-- **`planning-subagent.agent.md`** - Research and context gathering specialist.
+### Planning Skill
+- Research and context gathering specialist.
     - Analyzes codebase structure and patterns.
     - Identifies relevant files and functions.
     - Returns structured findings to inform plan creation.
-    - Uses Claude Sonnet 4.5 by default.
 
-### Implementation Subagent
-- **`implement-subagent.agent.md`** - Implementation specialist following TDD conventions.
+### Implementation Skill
+- Implementation specialist following TDD conventions.
     - Executes individual phases of the development plan.
     - Writes failing tests first, then minimal code to pass.
     - Works autonomously within phase boundaries.
-    - Uses Claude Haiku 4.5 by default for premium request efficiency.
 
-### Code Review Subagent
-- **`code-review-subagent.agent.md`** - Quality assurance specialist.
+### Code Review Skill
+- Quality assurance specialist.
     - Reviews uncommitted code changes using git to identify new code.
     - Validates test coverage and code quality.
-    - Returns review results back to Conductor (`APPROVED/NEEDS_REVISION/FAILED`).
-    - Uses Claude Sonnet 4.5 by default.
+    - Returns review results (`APPROVED/NEEDS_REVISION/FAILED`).
 
 ## Prerequisites
 
@@ -86,7 +103,9 @@ Before using the GitHub Copilot Orchestra, ensure you have:
 
 ### Setup Custom Agents
 
-The GitHub Copilot Orchestra uses custom chat modes in VSCode Insiders to enable the multi-agent workflow. Each `.agent.md` file defines a specialized AI agent.
+The GitHub Copilot Orchestra uses custom chat modes and agent skills in VSCode Insiders. Choose the architecture that fits your needs:
+
+#### Option 1: Root Agent with Skills (Recommended)
 
 1. **Open VSCode Insiders** in your workspace directory
     ```bash
@@ -94,45 +113,42 @@ The GitHub Copilot Orchestra uses custom chat modes in VSCode Insiders to enable
     code-insiders .
     ```
 
-2. **Locate Agent Files** - The repository includes four `.agent.md` files in the root directory:
-    - `Conductor.agent.md`
-    - `planning-subagent.agent.md`
-    - `implement-subagent.agent.md`
-    - `code-review-subagent.agent.md`
+2. **Copy Files** - Copy the following to your project:
+    - `Conductor.agent.md` to your project's root directory
+    - `.github/skills/` directory (contains planning, implementation, and code-review skills)
 
-3. **Install the agent files**
-    - **Copy the `.agent.md` files to your project's root directory**
-        - Great for sharing among a team.
-        - Scoped to the individual project.
-    - **Install the custom agents in your User Data for use in all workspaces**
-        - Allows the custom agents to work in any project you open with VSCode Insiders.
-        - Copy files to the User Data location:
-            - Something like `/Users/username/Library/Application Support/Code - Insiders/User/prompts` on Mac, or the equivalent on your system
-        - **OR:**
-        - Manual Setup Process:
-            - Click the chat mode dropdown at the bottom of the copilot chat.
-            - Click "Configure Custom Agents".
-            - Click "Create new custom agent" in the command dropdown at the top of VSCode.
-            - Select "User Data"
-            - Type the name of the file you're setting up. i.e.:
-                - Conductor
-                - planning-subagent
-                - implement-subagent
-                - code-review-subagent
-            - Copy and paste the context of the agent file from this repo into the file that opens in VSCode.
+3. **Install the Conductor agent**
+    - **Project-scoped**: Keep `Conductor.agent.md` in your project's root directory
+    - **User-scoped**: Copy to your User Data location:
+        - Mac: `/Users/username/Library/Application Support/Code - Insiders/User/prompts`
+        - Or use the manual setup process via the chat mode dropdown
 
-4. Create the Plans Directory
-    - The Conductor agent generates documentation files to track progress. Create the `plans/` directory (or the Conductor will make it when it writes out the first plan file):
+#### Option 2: Conductor Skill with Subskills
 
-        ```bash
-        mkdir plans
-        ```
-    - This directory will store:
-        - Core task plan documents (`<task-name>-plan.md`)
-        - Phase completion summaries (`<task-name>-phase-<N>-complete.md`)
-        - Final task completion summaries (`<task-name>-complete.md`)
+1. **Copy the `.github/skills/conductor/` directory** to your project's `.github/skills/` folder
 
-**No Additional Configuration Required** - The agents will appear in the GitHub Copilot Chat interface automatically.
+2. **The Conductor skill includes subskill files:**
+    - `SKILL.md` - Main conductor skill
+    - `planning.md` - Planning subskill
+    - `implementation.md` - Implementation subskill
+    - `code-review.md` - Code review subskill
+
+3. **Invoke the skill** from another agent or workflow that references the conductor skill
+
+### Create the Plans Directory
+
+For both options, create the `plans/` directory (or the Conductor will make it when it writes out the first plan file):
+
+```bash
+mkdir plans
+```
+
+This directory will store:
+- Core task plan documents (`<task-name>-plan.md`)
+- Phase completion summaries (`<task-name>-phase-<N>-complete.md`)
+- Final task completion summaries (`<task-name>-complete.md`)
+
+**No Additional Configuration Required** - The agents/skills will appear in the GitHub Copilot Chat interface automatically.
 
 ## Using the Conductor Agent
 
