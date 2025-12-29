@@ -1,5 +1,6 @@
 ---
 name: planning
+description: Research context and gather comprehensive information to inform plan creation.
 ---
 
 # Planning Subskill

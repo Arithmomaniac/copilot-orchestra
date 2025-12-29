@@ -1,5 +1,6 @@
 ---
 name: code-review
+description: Review code changes from a completed implementation phase.
 ---
 
 # Code Review Subskill

@@ -1,5 +1,6 @@
 ---
 name: implementation
+description: Execute implementation tasks following strict Test-Driven Development principles.
 ---
 
 # Implementation Subskill
